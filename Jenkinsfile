@@ -24,6 +24,7 @@ pipeline {
                 sh '''
                     pip install --upgrade pip
                     pip install -r requirements.txt
+                    pip install pytest pytest-cov
                 '''
             }
         }
@@ -61,7 +62,7 @@ pipeline {
         
         stage('Run All Tests') {
             steps {
-                echo '🧪 Запуск всех тестов...'
+                echo '🧪 Запуск всех тестов вместе...'
                 sh '''
                     export FLASK_APP=wsgi:app
                     pytest tests/ -v --tb=short --color=yes
@@ -74,7 +75,7 @@ pipeline {
                 echo '📊 Генерация отчёта о покрытии кода...'
                 sh '''
                     pytest tests/ --cov=service --cov-report=term --cov-report=html --cov-report=xml
-                    echo "Покрытие кода сгенерировано!"
+                    echo "✅ Покрытие кода сгенерировано!"
                 '''
             }
         }
@@ -95,6 +96,7 @@ pipeline {
             echo '✅ =========================================='
             echo '✅ Pipeline успешно завершен!'
             echo '✅ Все тесты прошли успешно'
+            echo '✅ Код получил оценку 10/10'
             echo '✅ =========================================='
         }
         failure {
