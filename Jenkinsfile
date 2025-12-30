@@ -8,6 +8,7 @@ pipeline {
     
     environment {
         FLASK_APP = 'wsgi:app'
+        DATABASE_URI = 'sqlite:///test.db'
     }
     
     stages {
@@ -45,6 +46,7 @@ pipeline {
                 echo '🧪 Запуск unit тестов (test_models.py)...'
                 sh '''
                     export FLASK_APP=wsgi:app
+                    export DATABASE_URI=sqlite:///test.db
                     pytest tests/test_models.py -v --tb=short --color=yes
                 '''
             }
@@ -55,6 +57,7 @@ pipeline {
                 echo '🧪 Запуск интеграционных тестов (test_routes.py)...'
                 sh '''
                     export FLASK_APP=wsgi:app
+                    export DATABASE_URI=sqlite:///test.db
                     pytest tests/test_routes.py -v --tb=short --color=yes
                 '''
             }
@@ -65,6 +68,7 @@ pipeline {
                 echo '🧪 Запуск всех тестов вместе...'
                 sh '''
                     export FLASK_APP=wsgi:app
+                    export DATABASE_URI=sqlite:///test.db
                     pytest tests/ -v --tb=short --color=yes
                 '''
             }
@@ -74,6 +78,7 @@ pipeline {
             steps {
                 echo '📊 Генерация отчёта о покрытии кода...'
                 sh '''
+                    export DATABASE_URI=sqlite:///test.db
                     pytest tests/ --cov=service --cov-report=term --cov-report=html --cov-report=xml
                     echo "✅ Покрытие кода сгенерировано!"
                 '''
